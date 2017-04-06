@@ -1,10 +1,9 @@
 #include <iostream>
 
+#include "common.h"
 #include "pHash.h"
 
-#include "boost/filesystem/operations.hpp"
-#include "boost/filesystem/path.hpp"
-#include "boost/program_options.hpp"
+#include "ioutils.h"
 
 int main(int argc, char** argv) {
   namespace fs = boost::filesystem;
@@ -32,7 +31,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  
+
 
   return 0;
 }
