@@ -47,7 +47,10 @@ int main(int argc, char** argv) {
   }
 
   ImageDeduper deduper(imagefiles);
-  deduper.Dedup();
+  auto groups = deduper.Dedup();
+  for(auto g : groups) {
+    for(auto x : g) cout << x << "; "; cout << endl;
+  }
 
   return 0;
 }

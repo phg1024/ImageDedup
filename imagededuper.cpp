@@ -53,27 +53,23 @@ vector<vector<string>> ImageDeduper::Dedup() const {
 vector<vector<int>> ImageDeduper::GenerateGroups(const vector<pair<int, int>> &pairs) const {
   vector<vector<int>> groups;
 
-  /*
-  def create_exclude_set(sim_pairs):
-    exclude_set = []
-
-    while len(sim_pairs) > 0:
-        current_set = sim_pairs[0]
-        test_pairs = sim_pairs[1:]
-        unprocessed_set = []
-        merged_set = set(current_set)
-        for a, b in test_pairs:
-            if a in merged_set or b in merged_set:
-                merged_set.update(a)
-                merged_set.update(b)
-            else:
-                unprocessed_set.append((a, b))
-
-        sim_pairs = unprocessed_set
-        exclude_set.extend(list(merged_set)[1:])
-
-    return exclude_set
-   */
+  vector<pair<int, int>> remaining_pairs = pairs;
+  while(!remaining_pairs.empty()) {
+    auto& pi = remaining_pairs.back();
+    remaining_pairs.pop_back();
+    vector<pair<int, int>> unprocessed_pairs;
+    set<int> merged_set{pi.first, pi.second};
+    for(auto pj : remaining_pairs) {
+      if(merged_set.count(pj.first) || merged_set.count(pj.second)) {
+        merged_set.insert(pj.first);
+        merged_set.insert(pj.second);
+      } else {
+        unprocessed_pairs.push_back(pj);
+      }
+    }
+    remaining_pairs = unprocessed_pairs;
+    groups.push_back(vector<int>(merged_set.begin(), merged_set.end()));
+  }
 
   return groups;
 }
