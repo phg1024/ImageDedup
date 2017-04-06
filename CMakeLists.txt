@@ -50,6 +50,7 @@ target_link_libraries(imagededup-ioutils
 add_library(imagededuper imagededuper.cpp)
 target_link_libraries(imagededuper
         imagededup-ioutils
+        pHash
         Qt5::Core
         Qt5::Widgets
         Qt5::OpenGL

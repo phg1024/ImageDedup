@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace aam {
+namespace imagededuper {
   vector<string> ReadFileByLine(const string &filename) {
     ifstream fin(filename);
     vector<string> lines;

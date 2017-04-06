@@ -1,9 +1,12 @@
 #include <iostream>
 
 #include "common.h"
-#include "pHash.h"
 
 #include "ioutils.h"
+#include "imagededuper.h"
+
+using namespace std;
+using namespace imagededuper;
 
 int main(int argc, char** argv) {
   namespace fs = boost::filesystem;
@@ -31,7 +34,20 @@ int main(int argc, char** argv) {
     return 1;
   }
 
+  const string settings_filename = vm["settings_file"].as<string>();
+  fs::path settings_filepath(settings_filename);
 
+  vector<pair<string, string>> image_points_filenames = ParseSettingsFile(settings_filename);
+  vector<string> imagefiles;
+  for(auto& p : image_points_filenames) {
+    fs::path image_filename = settings_filepath.parent_path() / fs::path(p.first);
+    fs::path pts_filename = settings_filepath.parent_path() / fs::path(p.second);
+    cout << "[" << image_filename << ", " << pts_filename << "]" << endl;
+    imagefiles.push_back(image_filename.string());
+  }
+
+  ImageDeduper deduper(imagefiles);
+  deduper.Dedup();
 
   return 0;
 }
