@@ -14,7 +14,8 @@ int main(int argc, char** argv) {
 
   po::options_description desc("Options");
   desc.add_options()
-    ("settings_file", po::value<string>()->required(), "Input settings file");
+    ("settings_file", po::value<string>()->required(), "Input settings file")
+    ("output", po::value<string>()->required(), "Output settings file");
 
   po::variables_map vm;
 
@@ -47,9 +48,17 @@ int main(int argc, char** argv) {
   }
 
   ImageDeduper deduper(imagefiles);
-  auto groups = deduper.Dedup();
-  for(auto g : groups) {
-    for(auto x : g) cout << x << "; "; cout << endl;
+  auto res = deduper.Dedup();
+
+  ofstream fout(vm["output"].as<string>());
+
+  cout << "Result:" << endl;
+  for(auto x : res) {
+    //cout << x << endl;
+    string img_i = fs::path(x).filename().string();
+    string pts_i = fs::path(x).stem().string() + ".pts";
+    cout << img_i << " " << pts_i << endl;
+    fout << img_i << " " << pts_i << endl;
   }
 
   return 0;

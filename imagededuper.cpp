@@ -17,7 +17,7 @@ void ImageDeduper::GenerateHashes(const vector <string> &imagefiles) {
   }
 }
 
-vector<vector<string>> ImageDeduper::Dedup() const {
+vector<string> ImageDeduper::Dedup() const {
   const int nimgs = files.size();
   vector<vector<int>> dists(nimgs, vector<int>(nimgs));
 
@@ -38,13 +38,27 @@ vector<vector<string>> ImageDeduper::Dedup() const {
 
   // merge the pairs into groups
   vector<vector<int>> groups = GenerateGroups(pairs);
-  vector<vector<string>> res;
+
+  // get the set of files to exclude
+  set<string> exclude_set;
   for(int i=0;i<groups.size();++i) {
-    vector<string> gi;
-    for(int j=0;j<groups[i].size();++j) {
-      gi.push_back(files[groups[i][j]]);
+    for(int j=1;j<groups[i].size();++j) {
+      exclude_set.insert(files[groups[i][j]]);
     }
-    res.push_back(gi);
+  }
+
+  cout << "Duplicate files:" << endl;
+  for(auto x : exclude_set) {
+    cout << x << endl;
+  }
+
+  // generate final set
+  vector<string> res;
+  for(int i=0;i<files.size();++i) {
+    const string filename_i = files[i];
+    if(!exclude_set.count(filename_i)) {
+      res.push_back(filename_i);
+    }
   }
 
   return res;

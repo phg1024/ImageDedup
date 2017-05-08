@@ -11,7 +11,7 @@ using std::pair;
 class ImageDeduper {
 public:
   ImageDeduper(const vector<string>& imagefiles);
-  vector<vector<string>> Dedup() const;
+  vector<string> Dedup() const;
 
 private:
   void GenerateHashes(const vector<string>& imagefiles);
